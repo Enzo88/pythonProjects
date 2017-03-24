@@ -38,7 +38,6 @@ def main():
             time.sleep(1)
             mylcd.backlight(0)
             sys.exit()
-    
 
 if __name__ == "__main__":
     main()
