@@ -18,7 +18,7 @@ finally:
 
 fm_process = None
 on_off = ["off", "on"]
-config_location = "/pirateradio/pirateradio.conf"
+config_location = "pirateradio.conf"
 
 frequency = 87.9
 shuffle = False
@@ -70,14 +70,14 @@ def play_songs(file_list):
 				streamurl = parse_pls(filename, 1)
 				if streamurl != None:
 					print("streaming radio from " + streamurl)
-					subprocess.call(["ffmpeg","-i",streamurl,"-f","s16le","-acodec","pcm_s16le","-ac", "2" if play_stereo else "1" ,"-ar","44100","-"],stdout=music_pipe_w, stderr=dev_null)
+					subprocess.call(["avconv","-i",streamurl,"-f","s16le","-acodec","pcm_s16le","-ac", "2" if play_stereo else "1" ,"-ar","44100","-"],stdout=music_pipe_w, stderr=dev_null)
 			elif re.search(".m3u$", filename) != None:
 				streamurl = parse_m3u(filename, 1)
 				if streamurl != None:
 					print("streaming radio from " + streamurl)
-					subprocess.call(["ffmpeg","-i",streamurl,"-f","s16le","-acodec","pcm_s16le","-ac", "2" if play_stereo else "1" ,"-ar","44100","-"],stdout=music_pipe_w, stderr=dev_null)
+					subprocess.call(["avconv","-i",streamurl,"-f","s16le","-acodec","pcm_s16le","-ac", "2" if play_stereo else "1" ,"-ar","44100","-"],stdout=music_pipe_w, stderr=dev_null)
 			else:
-				subprocess.call(["ffmpeg","-i",filename,"-f","s16le","-acodec","pcm_s16le","-ac", "2" if play_stereo else "1" ,"-ar","44100","-"],stdout=music_pipe_w, stderr=dev_null)
+				subprocess.call(["avconv","-i",filename,"-f","s16le","-acodec","pcm_s16le","-ac", "2" if play_stereo else "1" ,"-ar","44100","-"],stdout=music_pipe_w, stderr=dev_null)
 
 
 
@@ -157,7 +157,7 @@ def setup():
 def run_pifm(use_audio_in=False):
 	global fm_process
 	with open(os.devnull, "w") as dev_null:
-		fm_process = subprocess.Popen(["/root/pifm","-",str(frequency),"44100", "stereo" if play_stereo else "mono"], stdin=music_pipe_r, stdout=dev_null)
+		fm_process = subprocess.Popen(["./pifm","-freq",str(frequency),"-audio", "-"], stdin=music_pipe_r, stdout=dev_null)
 
 		#if use_audio_in == False:
 		#else:
