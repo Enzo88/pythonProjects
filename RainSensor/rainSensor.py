@@ -6,7 +6,6 @@ DO = 17
 GPIO.setmode(GPIO.BCM)
 
 def setup():
-	ADC.setup(0x48)
 	GPIO.setup(DO, GPIO.IN)
 
 def Print(x):
